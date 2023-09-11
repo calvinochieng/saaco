@@ -1,5 +1,21 @@
+# sensitive info here
+.env
+
+# no need to commit
 templates/
 
 static/
 
 staticfiles/
+
+# no need to commit migrations
+**/migrations/
+
+# VSCODE files
+.vscode/
+
+# compiled python files
+*.pyc
+
+# SQLite database file
+db.sqlite3
