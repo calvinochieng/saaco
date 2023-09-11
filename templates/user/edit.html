@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AwwzApp: Streamlined Blog Generation</title>
+    <meta name="description" content="Ready to streamline your content creation process and 
+      generate high-quality blogs with ease? Try AwwzApp today and see the difference it can make for your online presence. Click here to get started now.">
+    <link rel="shortcut icon" href="/static/images/icons/favicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/app/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma-tooltip/1.2.0/bulma-tooltip.min.css" integrity="sha512-eQONsEIU2JzPniggWsgCyYoASC8x8nS0w6+e5LQZbdvWzDUVfUh+vQZFmB2Ykj5uqGDIsY7tSUCdTxImWBShYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/static/app/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Q4TESDCD5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9Q4TESDCD5');
+    </script>
+    <style>       
+    </style>
+</head>
+<body>
+  <section class="hero is-fullheight is-flex is-flex-direction-row">
+    <div class="aside">
+      <div class="is-flex aside-content"> 
+            <a class="navbar-item text-white has-text " href="#" data-tooltip="Home">
+              <span class="icon  side-icon has-background-danger ">
+                <i class="fas fa-home"></i>
+              </span>
+            </a>
+            <a class="navbar-item text-white" href="/home/" data-tooltip="Projects">
+              <span class="icon  side-icon has-background-success ">
+                <i class="fa-solid fa-bars-progress"></i>
+              </span>
+            </a>
+
+            <a href="{% url 'creator' %}" class="navbar-item has-text-link" data-tooltip="Creator">
+              <span class="icon side-icon has-background-white-ter">
+                <i class="fa-solid fa-tools"></i>
+              </span>                     
+            </a>
+            <a class="navbar-item has-text-weight-bold has-text-white" href="#" data-tooltip="Tools">
+              <span>Tools</span>
+            </a>
+            <div class="navba-item">
+              <a class="navbar-item text-white" href="{% url 'domains' %}" data-tooltip="Domain Name Finder">  
+                <span class="icon side-icon has-background-white-ter">
+                <i class="fa-solid fa-globe  has-text-danger "></i>  
+                </span>
+              </a>  
+              <a class="navbar-item text-white" href="{% url 'titles' %}" data-tooltip="Topic Generator"> 
+                <span class="icon side-icon has-background-white">
+                <i class="fa-solid fa-heading has-text-info"></i>
+                </span>
+              </a>
+              <a class="navbar-item text-white" href="{% url 'writer' %}" data-tooltip="AI Writer">
+                <span class="icon side-icon has-background-white-ter">
+                  <i class="fa-solid fa-robot has-text-link"></i>
+                </span>  
+              </a>
+              <a class="navbar-item text-white" href="{% url 'image-search' %}" data-tooltip="Image Search">
+                <span class="icon side-icon has-background-white">
+                  <i class="fa-solid fa-camera has-text-danger"></i>
+                </span>  
+              </a>
+            </div>
+      </div>
+
+    </div>
+    <div class="main">
+      <nav class="navbar is-flex has-background-white-ter is-justify-content-space-between "> 
+        <div class="navbar-inline navbar-item">
+          <div class="navbar-brand is-hidden-mobile	">
+            <a class="navbar-item" href="/">
+              <span class="name" style="color: #1a1a1a !important;"><span style="color: #3273dc;">Awwz</span>App</span>
+            </a>
+          </div> 
+          <a class="navbar-item" href="#">
+            Home
+          </a>
+        </div>
+    
+        <div class="navbar-inline navbar-item">
+          <div class="navbar-item"> 
+            <a class=" is-link" href="{%url 'register' %}">
+              <span class="icon">
+                <i class="fas fa-user"></i>
+              </span>
+              <span>Profile</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+<!--  -->
+
+      <div class="container p-3">  
+        <p class="subtitle has-text-centered has-text-weight-bold">
+            Tools
+        </p>
+        <div class="subtitle">  
+          <div class="container is-flex is-flex-wrap-wrap is-justify-content-center" > 
+              <a href="{% url 'creator' %}" class=" card tool" data-tooltip="Blog Generator">
+                <span class=" icon side-icon ">
+                  <i class="fa-solid is-size-1 fa-tools"></i>
+                </span>
+                <div class="p-3 has-text-centered">
+                  Blog Generator
+                </div>                 
+              </a>
+              <a class=" tool card" href="{% url 'domains' %}" data-tooltip="Domain Name Finder">  
+                <span class="icon side-icon ">
+                <i class="fa-solid is-size-1 fa-globe has-text-danger "></i>  
+                </span>
+                <div class="p-3 has-text-centered">
+                  Domain Name Finder
+                </div>
+              </a>  
+              <a class=" tool card " href="{% url 'titles' %}" data-tooltip="Topic Generator"> 
+                <span class=" icon side-icon has-text-info ">
+                <i class="fa-solid is-size-1 fa-heading"></i>
+                </span>
+                <div class="p-3 has-text-centered">
+                  Topic Generator
+                </div>
+              </a>
+              <a class=" tool card" href="{% url 'writer' %}" data-tooltip="AI Writer">
+                <span class=" icon side-icon has-text-link ">
+                  <i class="fa-solid is-size-1 fa-robot"></i>
+                </span>
+                <div class="p-3 has-text-centered">
+                  AI Writer
+                </div>  
+              </a>
+              <a class=" tool card" href="{% url 'image-search' %}" data-tooltip="Image Search">
+                <span class=" icon side-icon has-text-success ">
+                  <i class="fa-solid is-size-1 fa-camera"></i>
+                </span>
+                <div class="p-3 has-text-centered">
+                  Image Search
+                </div>  
+              </a>
+          </div>
+        </div>
+      </div>
+<!--  -->
+
+    </div>
+  </section>    
+  <script src="/static/app/js/control.js"></script>
+</body>
+</html>
