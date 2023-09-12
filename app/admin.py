@@ -1,5 +1,5 @@
 from django.contrib import admin
-from saaco.models import Group, Membership, Contribution, Contributor
+from app.models import Group, Membership, Contribution, Contributor
 admin.site.register(Group)
 # admin.site.register(Person)
 admin.site.register(Membership)
