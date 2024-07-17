@@ -1,0 +1,23 @@
+{
+  "name": "Saaco App",
+  "short_name": "Saaco",
+  "description": "WhatsApp Contribution and Fundraising Simply Made Easy",
+  "dir": "auto",
+  "lang": "en-US",
+  "start_url": "/home/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#009688",
+  "background_color": "#009688",
+  "icons": [
+        {
+      "src": "/static/app/images/icons/favicon.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/static/app/images/icons/logo.png",
+      "sizes": "512x512"
+    }
+  ]
+}
+ 

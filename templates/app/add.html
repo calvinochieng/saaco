@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .hero{
+        justify-content: flex-start !important;
+    }
+    .item-title{
+        font-size: 1.5rem;
+        color: #363636;
+    }
+    .background-transparent{
+        background-color: transparent !important;
+    }
+    .icon.round{
+        border-radius: 50%;
+        background: var(--primary-color);
+        width: 48px;
+        height: 48px;
+        color: white;
+        padding: 2.0rem;
+    }
+    .group-popup{
+        display: flex;
+        position: absolute;
+        z-index: 10000;
+        padding: 1.5rem;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .form-close{
+        position: absolute;
+        top: 2rem;
+    }
+</style>
+<section class="hero has-background-white-ter is-fullheight-with-navbar">
+    <nav class="primary-bg mb-0">
+    <div class="container">
+        <div class="tabs is-medium">
+            <ul>
+                <li class="is-active">  
+                    <a href="{% url 'home' %}" class="has-text-white">       
+                        <span class="icon"><i class="fa fa-arrow-left"></i> 
+                        </span>
+                        <strong  class="has-text-white">
+                            /Create  
+                            {% if item %}
+                                {{item}}
+                            {% else %}
+                                Group or Contribution
+                            {% endif %}
+                                
+                        </strong>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+    <div class="m-0 p-1"> 
+            
+            {% if form %}  
+
+                <form action="/{{item|lower}}s/" method="POST" class="container form p-3">               
+                    {% csrf_token %}
+                    {{form.item}}
+                    <div class="field">
+                        <label for="name" class="label ">{% if form.name %} Name {% else %} Title {% endif %}</label>
+                        <div class="control">
+                            {{form.name}} {{form.title}}
+                        </div>
+                    </div>
+
+                    {% if item == 'Contribution'%}
+                    
+                    <div class="field">
+                        <label for="description" class="label">Message</label>
+                        <div class="control">
+                            {{form.description}}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="contribution_type" class="label">Contribution Type</label>
+                        <div class="select">
+                            <select name="contribution_type" id="id_contribution_type">
+                              <option class="option" value="" selected="">Chose Contribution Type</option>  
+                              <option value="Education">Education (School Feess)</option>
+                              <option value="Business">Business (Capital Fund Raiser)</option>
+                              <option value="Chama">Chama (Group Fund)</option>
+                              <option value="Medical">Medical Bill</option>
+                              <option value="Religious">Religious</option>
+                              <option value="Wedding">Wedding</option>
+                              <option value="Funeral">Funeral</option>
+                              <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div >
+                        <label for="group" class="label">Group <span id="showFlashForm" class="icon"><i class="fa fa-add has-text-success"></i></span> </label>
+                        <div class="select">
+                            <select  name="group" required="" id="id_group">
+                                <option class="option" value="" selected="">Chose a Group</option>
+                                {% for item in admin %}  
+                                    <option class="option" value="{{item.group.pk}}">{{item.group.name}}</option>                                
+                                {% endfor %} 
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="budget" class="label">Target</label>
+                        <div class="control">
+                            <input type="number" name="budget" value="00" class="input" required="" id="id_budget">
+                        </div>
+                    </div> 
+
+                        
+                    {% endif %}
+                                       
+                    <button class="button primary-bg is-medium is-fullwidth">
+                        <span>Next</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </button>
+                </form>
+
+            {% else %}
+
+                <div class="container pt-6 p-4">
+                    <div class="is-fullwidth mb-4 is-medium ">
+                        <a href="{% url 'add' %}?item=group" class="creators">
+                            <span class="icon mr-2 round">
+                                <i class="fa fa-users fa-2x"></i>
+                            </span>
+                            <span class="has-text-weight-bold is-size-5">Create Group</span>
+                        </a>
+                    </div>
+                    <div class="is-fullwidth is-medium">
+                        <a href="{% url 'add' %}?item=contribution" class="creators">
+                            <span class="icon mr-2 round">
+                                <i class="fa fa-hand-holding-heart fa-2x"></i>
+                            </span>
+                            <span class="has-text-weight-bold is-size-5">Start Contribution</span>
+                        </a>
+                    </div>
+                </div>              
+                
+            {% endif %}
+    </div>
+</section>
+
+<!-- MOdal and message section -->
+<div id="modal-success" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content p-5">
+    <div class="box notification is-success">
+      <p class=" ">Group Creation Success</p>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+    <!-- Group POPUP -->
+    {% if  item == 'Contribution' %}     
+        <form method="post" action="{% url 'api_groups' %}" class=" {% if admin %} is-hidden {% endif %} group-popup has-background-white"  id="flashGroupForm"> 
+            {% if admin %}<span class="icon form-close" id="formClose" ><i class="fa fa-close fa-2x has-text-black"></i></span>  {% endif %}
+            {% csrf_token %}
+            <input type="hidden" name="item" value="flash" id="id_item">
+            <div class="field" >
+                {% if not admin %}
+                    <div class="is-flex is-justify-content-center">
+                        <span class="icon" ><i class="fa fa-cancel has-text-danger fa-3x"></i></span>
+                    </div>                          
+                    <p class="subtitle mt-6 mb-6">You can't start a contribution if you're not an admin of any group!</p>
+                {% endif %}
+                <h1 class="title">Please Create a Group</h1>
+                <label for="name" class="label ">Name</label>
+                <div class="control">
+                    <input type="text" name="name" class="input is-medium " placeholder="Group Name" required="" id="id_name">  
+                </div>
+            </div>
+            <button class="button primary-bg " type ="submit" id="flashSubmit">
+                <span>Next</span> 
+                <span class="icon"><i class="fa fa-chevron-right"></i></span>
+            </button>
+        </form>
+        <script>
+            var showFlashForm = document.querySelector("#showFlashForm")
+            var formClose =  document.querySelector("#formClose")
+            var flashSubmit = document.querySelector("#flashSubmit")
+            let flashGroupForm = document.querySelector("#flashGroupForm");
+
+            async function createFlashGroup() {
+                let groupSelect = document.querySelector('#id_group')
+                let formData = new FormData(document.querySelector("#flashGroupForm"))
+                console.log(formData)
+                try {
+                  const response = await fetch('/api/groups/', {
+                    method: "POST", // or 'PUT'
+                    body:formData,
+                  });
+                  if (!response.ok) {
+                    throw new Error("Network response was not OK");
+                  }
+              
+                  const data = await response.json();
+                  console.log(data);
+
+                  const option = document.createElement('option');
+                  option.value = data.id;
+                  option.textContent = data.name;
+                  groupSelect.insertBefore(option, groupSelect.firstElementChild.nextSibling);
+                  flashGroupForm.reset()
+                //   close the form when successfull
+                  flashGroupForm.classList.toggle('is-hidden');
+                //   Show success modal
+                  document.querySelector('.modal').classList.toggle('is-active')
+
+
+                } catch (error) {
+                  console.error("Error:", error);
+                }
+            };
+              
+
+            showFlashForm.addEventListener('click', () => {
+                flashGroupForm.classList.toggle('is-hidden');
+            });
+
+            flashGroupForm.addEventListener('submit',(e) =>{
+                e.preventDefault();
+                flashSubmit.classList.toggle('is-loading')
+                flashSubmit.setAttribute('disabled','')
+                const groupName = document.getElementById('id_name');
+                console.log('Trial')
+
+                if (groupName.value.trim()){
+                    createFlashGroup()
+                }
+                else{
+                    groupName.classList.toggle('is-danger')
+                }
+                flashSubmit.classList.toggle('is-loading');
+                flashSubmit.removeAttribute('disabled')
+                console.log('end')
+            })
+        </script>
+            
+        {% if admin %}
+            <script>
+                //This one to show the close button only when the user an admin
+                formClose.addEventListener('click', () => {
+                    flashGroupForm.classList.toggle('is-hidden');
+                });
+            </script>    
+        {% endif %}
+    {% endif %}
+{% endblock content %}
+{% block footer %}{% endblock footer %}
+
+
+{% block script %}
+    
+{% endblock script %}
+    
+
+    

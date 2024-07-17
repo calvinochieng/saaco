@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  {% load static %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Saaco{% endblock title %}</title>
+  <link rel="manifest" href="/static/pwa/manifest.json" />
+  
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then(
+        (registration) => {
+          console.log("SW registration success", registration);
+        },
+        (er) => {
+          console.error(`SW failed: ${er}`);
+        },
+      );
+    } else {
+      console.error("SW unsupported");
+    }
+  </script>
+
+  <meta name="description" content=" {% block description %}{% endblock description %}">       
+  <!-- twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@saaco">
+  <meta name="twitter:image" content="{% static 'app/images/icons/logo.png' %}">
+
+  <link rel="shortcut icon" href="{% static 'app/images/icons/favicon.png' %}" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'app/bulma/css/bulma.min.css' %}">
+  <link rel="stylesheet" href="{% static 'app/style.css' %}">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  {% comment %} <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Q4TESDCD5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-9Q4TESDCD5');
+  </script> {% endcomment %}
+  <style>
+  .lander-background{
+    /* background: linear-gradient(166deg, #d9044c, #1e2860); */
+    /* background: linear-gradient(344deg, #202b29, #223e3c); */
+    {% comment %} background: linear-gradient(344deg, #232625, #242424); {% endcomment %}
+    background :linear-gradient(344deg, #232625, #001794);
+  }
+
+  figure.image{
+    overflow: hidden;
+  }
+  .image.is-2by1 img{
+      height: auto !important;
+      border-radius: 0.25rem;
+  }
+  .icon.is-online{
+    position:absolute;
+    right:.5rem;
+    top: 1rem
+  }
+  .icon.is-online .fa-circle{
+    font-size: 15px;
+    color: #48c774;
+  }
+
+  .item-title{
+    font-size: 1.25rem !important;
+    color: #363636;
+}
+
+.items{
+        margin-bottom: .35rem;
+        min-height: 100px;
+        border-radius: 1.0rem;
+        color: #4a4a4a;
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid #03a9f41a;
+        box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
+    }
+.item-tabs{
+  -webkit-overflow-scrolling: touch;
+  align-items: stretch;
+  display: flex;
+  font-size: 1.2rem;
+  justify-content: space-between;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.item-details{
+  display: flex;
+  vertical-align: top;
+  overflow-x: scroll;
+  white-space: nowrap;
+  flex-direction: column;
+  flex: 1;
+  scrollbar-width: none;
+}
+
+small {
+  font-size: .67rem;
+}
+span.name{ position: relative;}
+span.name::after{
+  content: '';
+  height: 10px;
+  width: 10px;
+  background-color: #1a1a1a;
+  position: absolute;
+  bottom: 11px;
+  right: -3px;
+  border-radius: 50%;
+}
+span.o{
+  text-shadow: #232625 -1px 0px 4px;
+}
+.float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:1.25rem;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #898;
+        z-index: 10000;
+    }
+    .this-card{
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem;
+      border: 1px solid #03a9f41a;
+      box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
+  
+  }
+  .card-content {
+    padding: 1.05rem;
+  }
+  .has-text-error{color: #f14668 !important}
+  .menu-drawer{
+    position: absolute;
+    top: 70px;
+    z-index: 10000;    
+    min-width: 100px;
+    background: #fcfcfc;
+    right: 0;
+/*     transform: translateX(100%); */
+    transition: all 200ms;
+    border-radius: 8px;
+    box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
+/*    visibility: hidden;*/
+  }
+  .menu-drawer::after{
+        content: "";
+    background: white;
+    position: absolute;
+    top: -4px;
+    right: 8px;
+    transform: rotate(45deg);
+    height: 1.0rem;
+    width: 1.0rem;
+  }
+  #details{
+    height: 100vh;
+  }
+  </style>
+</head>
+<body>
+  <nav class="navbar  primary-bg ">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <span class="name" style="color: #1a1a1a !important;"><span class="has-text-white">Saac<span  class="o">o</span></span>.</span>
+        </a>
+        <div class="navbar-burger" data-target="navMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>     
+      </div> 
+            
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item" href="{% url 'home' %}">Home</a>    
+        {% if user.is_authenticated %} 
+          
+        <a class="navbar-item" href="{% url 'profile' %}">
+          <strong>{{user.username}}</strong>
+        </a>
+        <a class="navbar-item" href="{% url 'logout' %}">Logout</a>
+
+        {% else %}           
+          <div class="navbar-item is-flex is-justify-content-center" >
+            <div class="field is-grouped">
+              <p class="control">
+                <a class="button primary-outline" href="{% url 'login' %}">
+                  SignIn
+                </a>
+              </p>
+              <p class="control">
+                <a class="button primary-bg" href="{%url 'register' %}">
+                  <span>SignUp</span>
+                </a>
+              </p>
+            </div>
+          </div>          
+        {% endif %}
+          <a href="https://bit.ly/saacoDonate" target="_blank" class="navbar-item is-hidden-desktop">
+            <button class="button  primary-bg">
+              <span class="icon">
+                <i class="fab fa-paypal"></i>
+              </span>
+              <span>Donate with PayPal</span>
+            </button>
+          </a> 
+        </div>
+      </div>     
+    </div>
+  </nav>
+
+ 
+  <ul class="messages p-4 is-flex is-justify-content-space-between is-align-items-center {%if not messages%}is-hidden{%endif%}" id = "message">
+    {% if messages %}
+      {% for message in messages %}
+        <li {% if message.tags %} class="has-text-{{ message.tags }}"{% endif %} id="messageText">{{ message }}</li>
+      {% endfor %}
+      {%else%}      
+        <li class="" id="messageText"></li>
+    {% endif %}
+    <span class="icon" id="closeMessage">
+      <i class="fa fa-close"></i>
+    </span>
+  </ul>
+
+  
+  {% block content %} {% endblock content %}
+    
+  {% block footer %}
+  <footer class="footer has-background-black-ter">
+    <p class="has-text-centered mb-5">
+      <a href="https://bit.ly/saacoDonate" target="_blank" class="">
+        <button class="button  primary-bg">
+          <span class="icon">
+            <i class="fab fa-paypal"></i>
+          </span>
+        </button>
+      </a> 
+    </p>
+
+    <div class="mb-5 has-text-centered footer-navbar">  
+      <div class="is-flex is-justify-content-center">
+        <a class="navbar-item" href="{% url 'home' %}">
+            Home
+        </a>        
+        <a class="navbar-item" href="{% url 'about' %}">
+            About
+        </a>        
+        <a class="navbar-item" href="{% url 'contact' %}">
+            Contact
+        </a> 
+      </div>
+      <div class="navbar-item is-flex is-justify-content-center" >
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="button primary-outline" href="{% url 'login' %}">
+              SignIn
+            </a>
+          </p>
+          <p class="control">
+            <a class="button primary-bg" href="{%url 'register' %}">
+              <span>SignUp</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <p class="has-text-centered">
+      <a href="https://twitter.com/saaco/"  target="_blank" >
+        <span class="icon has-text-info">
+          <i class="fa-brands fa-twitter"></i>
+        </span>
+      </a>
+      <a href="https://www.youtube.com/@saaco"  target="_blank" >
+        <span class="icon has-text-danger">
+          <i class="fa-brands fa-youtube"></i>
+        </span>
+      </a>
+    </p>
+    <p class="has-text-centered	">
+      <a href="/"><span class="name" style="color: #cfcfcf !important;">
+        <span class="primary-color">Saaco</span>
+        <span style="font-size: 30px;">.</span>
+      </a> 
+    </p>
+    <p class="has-text-centered has-text-grey ">
+      <span>From</span>
+      <br>
+      <span>AwwzApp</span>
+      <span class="">&copy; 2023</span>
+    </p>
+    </div>
+  </footer>
+  {% endblock footer %}
+  <script src="{% static 'app/js/control.js' %}"></script>  
+  <script type="text/javascript">
+    var message = document.querySelector("#message"); 
+    var messageText = document.querySelector("#messageText")
+    var closeMessage = document.querySelector("#closeMessage");
+
+    closeMessage.addEventListener("click",
+        e=> {
+          message.classList.toggle('is-hidden');
+          messageText.textContent = ""
+        }
+      )
+  </script>
+  <script type="text/javascript">
+    var showHideInfo = document.querySelector("#showHideInfo")
+    const showHideElem = (elem)=>elem.classList.toggle("is-hidden");
+      if(showHideInfo){
+        showHideInfo.addEventListener("click", ()=> showHideElem(document.querySelector("#menu-drawer")));
+    }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Functions to open and close a modal
+        function openModal($el) {
+            $el.classList.add('is-active');
+        }
+        
+        function closeModal($el) {
+            $el.classList.remove('is-active');
+        }
+        
+        function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            closeModal($modal);
+            });
+        }
+        
+        // Add a click event on buttons to open a specific modal
+        (document.querySelectorAll('.modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+        
+            $trigger.addEventListener('click', () => {
+            openModal($target);
+            });
+        });
+        
+        // Add a click event on various child elements to close the parent modal
+        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+        
+            $close.addEventListener('click', () => {
+            closeModal($target);
+            });
+        });
+        
+        // Add a keyboard event to close all modals
+        document.addEventListener('keydown', (event) => {
+            if(event.key === "Escape") {
+            closeAllModals();
+            }
+        });
+    });
+  </script>
+  {% block script %}{% endblock script %}
+    
+</body>
+
+</html>

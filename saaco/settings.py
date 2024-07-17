@@ -1,22 +1,53 @@
 from pathlib import Path
+import os
+import environ
+import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+SITE_ID = 1
+
+env = environ.Env(DEBUG=(bool, False))
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n$uewz9mu3d1j)f^5_xj*oe)feg9y3h)a6h5y50qaex2f41q_='
+SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'saacoapp.com'
+]
 
+
+CORS_ALLOWED_ORIGINS = [
+    "https://saacoapp.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://\w+\.saacoapp\.com$",
+]
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 
 # Application definition
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,17 +56,51 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Local apps
     'app',
+    'api',
+    # Installed app
+    "corsheaders",
+    # GOOGLE AUTH
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+          'profile',
+          'email'
+        ],
+        'AUTH_PARAMS': { "access_type": "online"}
+        ,
+        'APP': {
+            'client_id': env('GOOGLE_CLIENT_ID'),
+            'secret': env('GOOGLE_SECRET_KEY'),
+            'key': ''
+        }
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Cor Middlware
+    "corsheaders.middleware.CorsMiddleware",
+    # End
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # ALL AUTH    
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'saaco.urls'
@@ -61,7 +126,15 @@ WSGI_APPLICATION = 'saaco.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# if not DEBUG:# Replace the SQLite DATABASES configuration with PostgreSQL:
+#     DATABASES = {
+#         'default': dj_database_url.config(        # Replace this value with your local database's connection string.        
+#                 default='postgresql://postgres:postgres@localhost:5432/saaco',
+#                 conn_max_age=600
+#             )
+#         }
 
+# if DEBUG:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,24 +162,45 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = "/home/"
+LOGOUT_REDIRECT_URL = "/user/login/" 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
+# STATIC_ROOT = BASE_DIR / 'static/'
+# files storage during development
+# STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_DIRS = [  os.path.join(BASE_DIR, "static"),
+# ]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+# if  DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [BASE_DIR / 'static/']
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = '/static/'
+# Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+# and renames the files with unique names for each version to support long-term caching
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,0 +1,109 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<style>
+    .hero-body >.icon{
+        position: absolute;
+        opacity: .6;
+    }
+    .title>strong{
+        font-weight: inherit;
+        background: linear-gradient(45deg, #E91E63, #2196F3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: underline;
+        text-decoration-color: #E91E63;
+}
+    }
+</style>
+    
+<section class="hero has-background-white-ter is-fullheight-with-navbar">
+    <div class="hero-body  lander-background">
+        <i class="icon fa-brands fa-3x mb-5 has-text-success fa-whatsapp" style="top: 20%;left: 47%;"></i>
+        <i class="icon fa-brands fa-3x mb-5 fa-facebook-messenger" style="color: #673AB7;bottom: 33%;left: 15%;"></i>
+        <i class="icon fa-brands fa-3x mb-5 has-text-info fa-telegram" style="bottom: 25%; right: 20%;"></i>
+        <i class="icon fa-brands fa-3x mb-5 fa-discord" style="color: #0303e4;top: 26%;right: 15%;"></i>
+        <i class="icon fa-brands fa-3x mb-5 primary-color fa-line" style="bottom: 4%;right: 43%;"></i> 
+        <i class="icon fa-brands fa-3x mb-5 primary-color fa-twitter" style="bottom: 11%;left: 9%;"></i> 
+        <i class="icon fa-brands fa-3x mb-5 primary-color fa-facebook" style="top: 16%;left: 13%;"></i>
+        <div class="container largescreen">
+            <h1 class="title has-text-white has-text-centered" >
+                WhatsApp <strong class="primary-color">Contribution</strong> and <strong
+                class="primary-color">Fundraising </strong>Simply Made Easy
+            </h1>  
+            <p class="title-sub has-text-white has-text-centered" style = "font-size: 1.5rem;">
+                Organize and track your WhatsApp group contributions in one place. Say goodbye to manual updates!
+            </p>  
+            {% load socialaccount %}
+            <form class="is-flex  is-justify-content-center mb-5  mt-6" method="post" action="{% provider_login_url 'google' %}?next=/"> {%csrf_token%}
+                <button type="submit" class="button primary-bg is-half is-medium">
+                    <span class="icon" >
+                        <i class="fa fa-brands fa-google has-text-white"></i> 
+                    </span> 
+                    <span class="pl-4">Get in using Google</span>                       
+                </button>
+            </form> 
+            <div class="mt-5 mb-5 is-flex  is-justify-content-center is-align-items-center">
+                <span  class="p-3 has-text-white">Or Manually</span>
+            </div>        
+            <div class="field is-grouped mt-5 is-justify-content-center">
+                <p class="control">
+                  <a class="button primary-outline has-text-white is-medium has-text-weight-bold" href="{% url 'login' %}">                    
+                    Sign In
+                  </a>
+                </p>
+                <p class="control">
+                    <a class="button primary-outline has-text-white is-medium has-text-weight-bold" href="{% url 'register' %}">Sign Up</a>
+                </p>
+              </div>
+        </div>
+    </div> 
+</section>
+ <section class="section">
+    <div class="container largescreen">
+        <h2 class="title has-text-black-ter has-text-centered" >
+           Available In All Major Plaforms
+        </h2> 
+        <ul class="platforms is-justify-content-center is-align-item-center is-flex is-flex-wrap-wrap">
+            <a href="">
+                <li class="p-3 has-text-centered">
+                <i class="icon fa-brands fa-2x mb-5 has-text-success fa-whatsapp"></i>
+                <br><span>WhatsApp</span>
+            </li>
+            </a>
+            <a href="">
+                <li class="p-3 has-text-centered">                
+                <i class="icon fa-brands fa-2x mb-5 fa-facebook-messenger" style="color: #673AB7;"></i>
+                <br><span>Messenger</span>
+            </li>
+            </a>
+            <a href="">
+                <li class="p-3 has-text-centered">
+                <i class="icon fa-brands fa-2x mb-5 has-text-info fa-telegram"></i>
+                <br><span>Telegram</span>
+            </li>
+            </a>
+            <a href="">
+                <li class="p-3 has-text-centered">
+                <i class="icon fa-brands fa-2x mb-5 fa-discord" style="color: #0303e4;"></i>
+                <br><span>Discord</span>
+            </li>
+            </a>
+            <a href="">
+                <li class="p-3 has-text-centered">              
+                <i class="icon fa-brands fa-2x mb-5 primary-color fa-line"></i>  
+                <br><span>Line</span>
+            </li>
+            </a>
+        </ul>
+        
+    </div>
+</section> 
+
+{% endblock content %}
+
+{% block scripts %}
+    
+{% endblock scripts %}
+    
+    

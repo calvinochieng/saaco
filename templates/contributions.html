@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .hero{
+        justify-content: flex-start !important;
+    }
+    .item-title{
+        font-size: 1.5rem;
+        color: #363636;
+    }
+    .background-transparent{
+        background-color: transparent !important;
+    }
+    .icon.round{
+        border-radius: 50%;
+        background: var(--primary-color);
+        width: 48px;
+        height: 48px;
+        color: white;
+        padding: 2.0rem;
+    }
+</style>
+<section class="hero has-background-white is-fullheight-with-navbar " style="">
+    <nav class=" primary-bg mb-0">
+        <div class="container">
+            <div class="tabs is-medium">
+                <ul>
+                    <li class="is-active">  
+                        <a href="{% url 'home' %}" class="has-text-white">       
+                            <span class="icon"><i class="fa fa-arrow-left"></i> 
+                            </span>
+                            <strong  class="has-text-white">/Contributions</strong>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="m-0 p-1">          
+        <div class=" container p-1">            
+            {% if items %} 
+                {% for item in items %}
+                <div  class="card items p-2">    
+                    <div class="card-content p-1">
+                        <a href="{% url 'contribution' item.pkid %}"  class="media mb-1 is-flex is-align-items-center ">
+                            <div class="media-left">
+                                <figure class="image is-48x48">                                
+                                    <img src="
+                                    {% if item.img %}                                    
+                                         /media/{{item.img}} {% else %} /static/app/images/icons/favicon.png
+                                    {% endif %}" alt=" {{item.description}}"> 
+                                </figure> 
+                            </div>
+                            <div class="media-content">
+                                <p class="item-title active">
+                                    <span>{{item.title|truncatechars:75}}</span>
+                                </p>
+                                {% if item.description %}                        
+                                    <p class="subtitle is-6 has-text-grey">
+                                        {{item.description|truncatechars:50}}
+                                    </p>
+                                    {% else %}
+                                {% endif %}
+                            </div>
+                        </a>
+                        <footer class="card-footer">
+                            <div class="card-footer-item pt-1 pb-0 has-text-centered ">
+                                <p>
+                                    <span class="icon">
+                                        <i class="fa fa-users primary-color"></i>
+                                    </span>
+                                    <br>
+                                    <span> {{item.contributors}}</span>
+                                </p> 
+                            </div>
+                            <div class="card-footer-item pt-1 pb-0 has-text-centered ">
+                                <p>
+                                    <span class="icon">
+                                        <span class="pr-1 has-text-grey">Raised</span>
+                                        <i class="fa fa-hand-holding-heart primary-color" ></i>
+                                    </span>
+                                    <br>
+                                    <span>
+                                        {{item.collected}}
+                                        <sup class="has-text-success is-size-7">
+                                            {{item.percentage}}% 
+                                            <i class="fa fa-circle-check has-text-link"></i>
+                                        </sup>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="card-footer-item pt-1 pb-0 has-text-centered ">
+                                <p><span class="icon">
+                                <span class="pr-1  has-text-grey">Target </span> <i class="fa fa-bank primary-color"></i>
+                                </span>
+                                    <br>
+                                    <span> {{item.budget}}</span>
+                                </p> 
+                            </div>
+                        </footer>
+                        <div class="mt-1">
+                            <a href="{% url 'contributions'  %}?type={{item.contribution_type}}">
+                                <span class="tag">{{item.contribution_type}}</span>
+                            </a>
+                            <a  class="ml-3" href="{% url 'group' item.group.pkid %}">
+                                <span>{{item.group.name}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>    
+                {% endfor %}
+            {% else %}               
+                <div class="container pt-6 p-4">
+                    <div class="is-fullwidth is-medium pl-4">
+                        <a href="{% url 'add' %}?item=contribution" class="creators">
+                            <span class="icon mr-2 round">
+                                <i class="fa fa-hand-holding-heart fa-2x"></i>
+                            </span>
+                            <span class="has-text-weight-bold is-size-5">Start Contributions</span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block footer %}{% endblock footer %}
+
+    

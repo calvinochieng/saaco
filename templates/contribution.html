@@ -1,0 +1,510 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load shortened %}
+<style>
+    .hero{
+        justify-content: flex-start !important;
+        position: relative;
+    }
+
+    .item-title{
+        font-size: 1.5rem;
+        color: #363636;
+    }
+    .background-transparent{
+        background-color: transparent !important;
+    }
+    .floatedDiv, .floated{
+        position: fixed;
+        bottom: 0;
+        height: fit-content;
+        padding-top: 3.5rem;
+        padding-bottom: 1.5rem;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(100%);
+        transition: all 300ms;
+        z-index: 100000;
+        border-top-left-radius: 58px;
+        border-top-right-radius: 58px;
+        box-shadow: #1a1a1a1c 0px -1px 20px 0px;
+        }
+    .pullup{
+        transform: translateY(0) !important;
+    }
+    #close, #hide{   position: absolute;
+        z-index: 1;
+        top: .75rem;
+        background: transparent;
+        border: none;}
+    .round{
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        box-shadow: #00000054 1px 0px 1px 0px;
+    }
+    .sharers{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent !important;
+        border: none !important;
+        color: #242424!important;
+
+    }
+    .divider{border-bottom: 1px solid #ededed;
+    padding-bottom: 1rem;}
+    .social-share{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        margin-bottom: .25rem;
+    }
+    .float-add{
+        height: 48px !important;
+        width: 48px !important;
+/*        box-shadow: 0px 0em 1em 0.25em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;*/
+        box-shadow: -5px 7px 20px 2px #2196F3;
+    }
+    .card-content.content{
+
+        box-shadow: 0px 0px 3px 0px #44444430;
+        border-radius: 5px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        margin: 0rem 1rem 1rem 1rem;
+    }
+.this-card{
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem;
+    border: 1px solid #03a9f41a;
+    box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
+    background-image: url(/static/app/images/icons/favicon.png);
+    background-color: #00bcd429;
+    background-blend-mode: multiply;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-position-y: -13%;
+
+}
+#contributorsList>p:hover{
+    padding-top: .5rem;
+    background: #2196f31f;
+    transition: all 200ms;
+
+}
+
+#contributorsList{
+    transition: all 200ms;
+}
+</style>
+<section class="hero has-background-white is-fullheight-with-navbar ">
+    <nav class="primary-bg mb-0">
+        <div class="container">
+            <div class="item-tabs is-medium is-align-items-center">  
+                <div class="is-flex is-align-items-center pl-3">                           
+                    <a href="{% url 'contributions' %}" class="has-text-white">
+                        <span class="icon"><i class="fa fa-arrow-left" data-url = "{% url 'contributions' %}"></i> 
+                        </span>
+                    </a>
+                    <div class="media-left mr-2">
+                        <figure class="image is-48x48">                                
+                            <img src="/static/app/images/icons/favicon.png" alt=" {{item.title}}"> 
+                        </figure> 
+                    </div>
+                </div>
+                <div class="item-details px-2 py-2">
+                    <strong  class="has-text-white" id="title">{{item.title}}</strong> 
+                    <div class="is-flex has-text-white-ter">  
+                        <a href="{% url 'contributions'  %}?type={{item.contribution_type}}">
+                            <small>
+                                <span class="tag is-link has-text-white-ter">{{item.contribution_type}}</span>
+                            </small>
+                        </a>
+                        <a href="{% url 'group' item.group.pkid %}" class="pl-1 has-text-white-ter">
+                            <small>
+                                {{item.group.name}}
+                                <span class="icon">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                            </small>                                        
+                        </a>                   
+                    </div>
+                </div>  
+                <span class="icon px-3" id="showHideInfo">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="menu-drawer p-4 is-hidden" id="menu-drawer">
+        <a href="#details" onclick="showHideElem(document.querySelector('#menu-drawer'));">
+            Contribution info
+            <span class="icon">
+                <i class="fa fa-circle-info has-text-black-ter"></i>
+            </span>
+        </a>
+    </div>
+    <div class="m-0 p-1">          
+        <div class="container has-background-white pt-4">
+            {% if item%}                                   
+            <div class="card this-card mb-5"> 
+                <div class="is-flex pb-4">
+                    <span>
+                        <span class="icon">
+                            <i class="fa fa-hand-holding-heart primary-color"></i>
+                        </span>               
+                        <span>Raised</span>
+                    </span>
+                </div>
+                <div class="is-flex mb-4 is-justify-content-space-between is-align-items-center">
+                    <span>
+                        <strong class="is-size-4 primary-color" id="raised">{{item.collected}}</strong>
+                        <sup class="has-text-success is-size-7"><span id="percentage">{{item.percentage}}% </span> <i class="fa fa-circle-check has-text-link"></i></sup>
+                    </span>                        
+                    <button  id="{% if is_admin %}addButton{%else%}notAdmin{% endif %}" class="button blink-now round  is-link float-add">
+                        <i class="fa fa-add float-button has-text-white"></i>
+                    </button> 
+                </div>
+                <div class="is-flex is-justify-content-space-between has-text-black-ter">
+                    <div>
+                        <span class="has-text-grey">Contributors</span>
+                        <br>                           
+                        <span class="icon">
+                            <i class="fa fa-users primary-color"></i>
+                        </span> 
+                        <span id="contributors">{{item.contributors}}</span>
+                    </div> 
+                    <div>
+                        <span class="has-text-grey">
+                            Budget
+                        </span>
+                        <br>                          
+                        <span class="icon">
+                            <i class="fa fa-dollar primary-color"></i>
+                        </span>
+                        <span id="budget">{{item.budget}}</span>
+                    </div>                       
+                </div>                   
+            </div>
+            {% endif %}
+            <div class="card-content pt-0" id="contributorsList">
+                {% for item in item.jsondata.contributors  %}
+
+                <p class="is-flex is-justify-content-space-between pb-1" >
+                    <span class="user-list" data-id="{{forloop.counter}}">{{forloop.counter}}. {{item.name}}  <strong  class="ml-4">{{item.amount}}</strong></span>                    
+                    <span class="icon">
+                        <i class="fa fa-circle-check primary-color"></i>
+                    </span>                        
+                </p>
+                    
+                {% endfor %}
+            </div>  
+        </div>
+    </div>
+    <!-- Floatin Button Section-->    
+
+        
+    <button  id="floatButton" class="button float is-link">
+        <i class="fa fa-share-alt fa-2x float-button has-text-white"></i>
+    </button>
+</section>
+<section class="section is-fullheight" id="details">
+    <div class="container"> 
+        <div class="subtitle pb-4">Contribution Details</div>       
+        <h1  class="title" >{{item.title}}</h1>
+        <figure class="image" style="max-width: 200px">                                
+            <img src="{%if item.img %} {{item.img}} 
+            {%else%}
+            /static/app/images/icons/favicon.png
+            {%endif%}" alt=" {{item.title}}"> 
+        </figure> 
+        <p class="subtitle pt-4" id="description">{%if item.description%}{{item.description}}{%endif%}</p>
+        <p class="pb-4">
+            <span>Amount Raised: </span>   
+            <strong class="">{{item.collected}}</strong>
+            <sup class="has-text-success is-size-7"><span >{{item.percentage}}% </span></sup>
+            <br/>
+            <span >
+                Budget: <strong> {{item.budget}}</strong>
+            </span>
+            <br>
+            <span>
+                Contributors:  <strong> {{item.contributors}} </strong>
+            </span>
+        </p>
+    </div>
+</section>
+<!-- Floated Items Starts Here -->
+<div class="floatedDiv has-background-white" id="floatedDiv">
+    <button class="button has-background-transparent" id="close">
+        <span class="icon has-text-black"><i class="fa fa-2x fa-close"></i></span>
+    </button>
+    <div class="container p-4">
+        <div class="is-fullwidth mb-4 is-medium pl-4 is-flex divider">
+            <div class="sharers">
+                <button class="icon mr-2 round primary-color button" id="copyLink">
+                    <i class="fa fa-link "></i>
+                </button>
+                <span class="mt-2">Copy Link</span>
+            </div>
+            <div class="sharers ml-4">
+                <button class="icon mr-2 round primary-color button"id="copySnippet">
+                    <i class="fa fa-share "></i>
+                </button>
+                <span class="mt-2">Copy Snippet</span>
+            </div>
+        </div>
+        <div class="is-fullwidth is-medium pl-4 divider">
+            <a href="" class="is-flex is-align-items-center creators primary-color" id="reporter">
+                <button class=" button icon mr-2 round primary-bg is-64x64" id="reporter">
+                    <i class="fa fa-paste fa-2x"></i>
+                </button>
+                <span class="has-text-weight-bold is-size-5">Copy & Share</span>
+            </a>
+        </div>
+        <div class="is-fullwidth is-flex">
+            <div class="ml-4 mr-6 mt-4">
+                <button id="whatsAppButton" class="button icon social-share">                 
+                    <i class="fa-brands fa-2x has-text-success fa-whatsapp"></i>
+                </button>
+                <button id="xButton" class="button icon social-share">                 
+                    <i class="fa-brands fa-2x primary-color fa-twitter"></i>
+                </button>
+                <button id="fbButton" class="button icon social-share">                 
+                    <i class="fa-brands fa-2x has-text-info fa-facebook"></i>
+                </button>
+                <button id="telegramButton" class="button icon social-share">                 
+                    <i class="fa-brands fa-2x has-text-info fa-telegram"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_admin %}    
+    <!-- Wizard for adding new contributors -->
+    <div id="contributorsFormContainer" class="floated has-background-white">   
+        <button class="button has-background-transparent" id="hide">
+            <span class="icon has-text-black"><i class="fa fa-2x fa-close"></i></span>
+        </button>   
+        <form action="{% url 'api_contributors' pkid %}" method="POST" class="form p-3" id="contributorForm">          
+            {% csrf_token %}
+            <div class="field">
+
+                <label for="name" class="label ">Add a Contributor</label>
+                <div class="control">
+                    <label for="id_name">Name:</label> 
+                    <input type="text" name="name" class="is-medium input mb-4" placeholder="Contributor's Name" required="" id="id_name">                  
+                    <label for="id_amount">Amount:</label>
+                    <input type="number" name="amount" class="is-medium input" placeholder="Amount" required="" id="id_amount" value="">
+                    <input type="hidden" name="pk" id="id_pk">                
+                </div>
+            </div>                            
+            <button id="contributionsSubmitor"  type="submit" class="button primary-bg is-medium ">
+                <span>Submit</span>
+                <span class="icon is-small">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            </button>
+        </form>
+    </div>    
+{% endif %}
+
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
+{% block script %}
+    <script>
+        var floatButton = document.querySelector("#floatButton");
+        var closeButton = document.querySelector("#close");
+        var floatedDiv = document.querySelector("#floatedDiv");
+        
+        [floatButton, closeButton].forEach(element => {element.addEventListener('click', () => floatedDiv.classList.toggle('pullup')); });
+
+    </script> 
+    <script>
+        var url = window.location.href
+        var tittle = document.querySelector('#title').textContent;
+        var description = document.querySelector('#description').textContent;
+        var contributors = document.querySelector('#contributors')
+        var raised = document.querySelector('#raised')
+        var budget = document.querySelector('#budget')
+        var reporter = document.querySelector('#reporter')
+        var copyLink = document.querySelector("#copyLink")
+        var copySnippet = document.querySelector("#copySnippet")
+
+        const copyText = async (data)=>{
+            await navigator.clipboard.writeText(data);
+            notifier("has-text-success","Copied, please share now!")
+            // alert("Copied");
+        }
+
+        const userHandler = () =>{
+            var userList = document.querySelectorAll('.user-list')
+            let theList = ''
+            let extraListNums = '';
+            // Creates the contrubutors list
+            userList.forEach(element => theList = theList+`${element.textContent.trim()}\n`)
+            // Extended numbers generators
+            for (let index = 1; index < 9; index++) {
+                extraListNums = extraListNums + `${userList.length+index}. \n`;// console.log(extraListNums)
+            }
+            // console.log(extraListNums)
+            return theList+extraListNums
+        }//console.log(userHandler())
+
+        const generateReport = ()=>{
+            let content = 
+            `*${tittle}*\n${description.trim()}\nTarget: *${budget.textContent}*\n${userHandler()}\nContributors: *${contributors.textContent}* | Total Raised: *${raised.textContent}*`
+            return content+`\n\nView, Create, Edit, Share report\n>> ${url}`
+        }
+        
+        // console.log(generateReport())
+
+        const generateSnippet = ()=>{
+            let content = 
+            `*${tittle}*\nTarget: *${budget.textContent}*\nContributors: *${contributors.textContent}* | Total Raised: *${raised.textContent}* ${document.querySelector("#percentage").textContent}`
+            return content+`\n\nView complete report>> ${url}`
+        }
+        // console.log(generateSnippet())
+        reporter.addEventListener('click',(e)=>{
+            e.preventDefault();
+            let textData = generateReport();
+            copyText(textData);// console.log(textData)
+        });
+
+        copyLink.addEventListener('click',()=>{copyText(url)})
+        copySnippet.addEventListener('click',()=>{copyText(generateSnippet())})
+    </script> 
+      <!--WhatsApp sharing  -->
+    <script>
+        var whatsAppButton = document.querySelector("#whatsAppButton")
+        var xButton = document.querySelector("#xButton")
+        var fbButton = document.querySelector("#fbButton")
+        var fbMessenger = document.querySelector("#fbMessenger")
+        var telegramButton = document.querySelector("#telegramButton")
+
+        const shareOn = (social)=>{
+            let textToShare = encodeURIComponent(`*${tittle}*\nTarget: *${budget.textContent}*\nContributors: *${contributors.textContent}* | Total Raised: *${raised.textContent}*`)
+            let socialUrl = ''
+            switch (social) {
+                case 'x':
+                    socialUrl = `http://twitter.com/share?text=${textToShare}&url=${url}&hashtags=#Saaco`
+                    break;
+                case 'whatsapp':
+                    socialUrl = `https://api.whatsapp.com//send?text=${encodeURIComponent(generateReport())}`
+                    break;
+                case 'fb':
+                    socialUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(textToShare)}`
+                    break;
+                case 'telegram':
+                    socialUrl = `https://t.me/share/url?url=${url}&text=${textToShare}`
+                    break;            
+                default:
+                    break;
+            }
+            try {
+            window.open(socialUrl,'_blank')
+            } catch (error) {
+                // console.log(error)
+                notifier("has-text-error","Couldn't share, try gain!")
+                // alert('Couldn\'t share')
+            } 
+        }
+        
+        // For sharing the report on WhatsApp
+        whatsAppButton.addEventListener('click',()=>shareOn('whatsapp'))
+        xButton.addEventListener('click',()=>shareOn('x'))
+        fbButton.addEventListener('click',()=>shareOn('fb'))
+        telegramButton.addEventListener('click',()=>shareOn('telegram'))
+    </script>
+    <script>
+        var addButton  = document.querySelector('#addButton')
+        var hideFormButton = document.querySelector("#hide")
+        var contributionsSubmitor = document.querySelector("#contributionsSubmitor")
+        var contributorForm = document.querySelector("#contributorForm")
+
+        // UI part that needs to be updated
+        var contributors = document.querySelector('#contributors')
+        var raised= document.querySelector("#raised")
+        let contributorsList = document.querySelector('#contributorsList')
+
+        var contributorsFormContainer = document.querySelector("#contributorsFormContainer");
+        // message variable is available from the base.html
+
+        const notifier = (className,messageNotification)=>{  
+            if (!message.classList.contains("is-hidden")){ message.classList.add("is-hidden")} // message variable is available from the base.html////purpose of this is to remove any preveous notification
+            var messageText = document.querySelector("#messageText");
+            messageText.classList.value = className;
+            messageText.textContent = messageNotification
+            message.classList.toggle("is-hidden")
+        }
+        
+
+        // This part is text is the Add and Hide button is visible or not
+
+        async function addContributor() {
+            let formData = new FormData(document.querySelector("#contributorForm"))
+            contributionsSubmitor.classList.toggle("is-loading")
+            try {
+                const response = await fetch("{% url 'api_contributors' pkid%}", {
+                method: "POST", // or 'PUT'
+                body:formData,
+                });
+                if (!response.ok) {
+                throw new Error("Network response was not OK");
+                }
+            
+                const data = await response.json();
+                if (data){
+                    contributors.textContent = data.contributors;
+                    raised.textContent = data.total
+                    let num = document.querySelectorAll('.user-list').length+1
+                    document.querySelector("#percentage").textContent = data.percentage;
+                    contributorsList.insertAdjacentHTML("beforeend", 
+                        `<p class="is-flex is-justify-content-space-between pb-1" >
+                            <span class="user-list" data-id="${num}">${num}. ${data.name}  <strong  class="ml-4">${data.amount}</strong></span>                    
+                            <span class="icon">
+                                <i class="fa fa-circle-check primary-color"></i>
+                            </span>                        
+                        </p>`
+                    )
+                    notifier('has-text-success',"Contributor added successfully, add more");
+
+                }
+                // console.log(data);
+                contributorForm.reset();
+                contributionsSubmitor.classList.toggle("is-loading");
+                contributorsFormContainer.classList.toggle('pullup');
+
+
+            } catch (error) {
+                console.error("Error:", error);
+                notifier("has-text-error", "Contributor couldn't be added, please try again!");
+
+                contributionsSubmitor.classList.toggle("is-loading");
+                contributorsFormContainer.classList.toggle('pullup');
+            }
+        };
+              
+        
+        if (contributorForm ){
+            [addButton, hideFormButton].forEach(element => {element.addEventListener('click', () => contributorsFormContainer.classList.toggle('pullup')); });
+            contributorForm.addEventListener('submit',e=>{
+                e.preventDefault();
+                addContributor();
+
+            })
+        };
+
+    </script>
+{% endblock script %}
+    

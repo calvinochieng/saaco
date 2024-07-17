@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In SaacoApp{% endblock title %}
+
+{% block descrption %} Welcome Back Please SignIn{% endblock descrption %}
+
+
+{% block content %}
+  <section class="hero has-background-white-ter is-fullheight-with-navbar">
+    <div class="hero-body ">
+      <div class="container is-flex is-justify-content-center is-align-items-center">
+        <div class="has-background-white p-3 card pb-4">
+          {% load socialaccount %}
+          <h1 class="title pt-4  has-text-weight-bold   has-text-centered">Sign In</h1>
+          <form class="is-flex mb-4" method="post" action="{% provider_login_url 'google' %}?next=/"> {%csrf_token%}
+            <button type="submit" class="button primary-bg is-fullwidth is-medium">
+              <span class="icon">
+                <i class="fa fa-brands fa-google has-text-white"></i> 
+              </span> 
+              <span class="pl-4">Sign In with Google</span>                       
+            </button>
+          </form> 
+          <div class="mt-6 mb-6 is-flex dropdown-divider is-justify-content-center is-align-items-center">
+            <span class="has-background-white p-3">Or</span>
+          </div>            
+          <form method="POST" class="tool-form m-0">{% csrf_token %}
+                <p>
+                    <label for="id_username">Username:</label>
+                    <input  class="input is-normal mb-2"  type="text" name="username" placeholder="Username" required id="id_username">
+                </p>
+                <p>
+                    <label for="id_password">Password:</label>
+                    <input class="input is-normal mb-2" type="password" autocomplete placeholder="Password" name="password" required id="id_password">
+                </p> 
+              <button type="submit" class="input button has-text-white is-link is-normal mt-2">SIGN IN</button>
+          </form>
+          <p class="has-text-black p-3">Don't have an account <a class="has-text-link" href="{% url 'register' %}">Sign Up</a>  </p>
+        </div>
+    </div>
+  </section>
+{% endblock content %}
+{% block scripts %}
+    
+{% endblock scripts %}
+  

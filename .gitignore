@@ -2,11 +2,11 @@
 .env
 
 # no need to commit
-templates/
+# templates/
 
-static/
+# static/
 
-staticfiles/
+# staticfiles/
 
 # no need to commit migrations
 **/migrations/

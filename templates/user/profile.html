@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<section class="hero has-background-white is-fullheight-with-navbar">
+  <div class="is-flex mb-5 is-justify-content-space-between">
+      <div>
+          <strong id="user" data-user = "{{user.username}}">{{user}}</strong>
+      </div> 
+      <div class="navbar-item is-justify-content-flex-end" style="padding-right:0px !important">
+          <a class="mr-1" href="http://saacoapp.com" target="_blank" style="display: none;">
+              <span class="icon is-medium">
+                  <i class="fa fa-dollar has-text-green" ></i>
+              </span> 
+          </a>
+          <a class="menu-show" role="button"> 
+              <span class="icon is-medium">
+                  <i class="fa fa-cog has-text-black" ></i>
+                  <i class="fa fa-close has-text-black" style="display: none;"></i>
+              </span> 
+          </a>
+      </div> 
+  </div>
+  <div class="container largescreen">
+      <h1 class="title" >
+          Profile
+      </h1>
+        
+  </div>
+</section>
+{% endblock content %}
+  

@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .hero{
+        justify-content: flex-start !important;
+        position: relative;
+    }
+    .item-title{
+        font-size: 1.5rem;
+        color: #363636;
+    }
+    .background-transparent{
+        background-color: transparent !important;
+    }
+
+    .floatedDiv, .floated{
+        position: fixed;
+        bottom: 0;
+        height: fit-content;
+        padding-top: 3.5rem;
+        padding-bottom: 1.5rem;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(100%);
+        transition: all 300ms;
+        z-index: 100000;
+        border-top-left-radius: 58px;
+        border-top-right-radius: 58px;
+        box-shadow: #1a1a1a1c 0px -1px 20px 0px;
+        }
+    .pullup{
+        transform: translateY(0) !important;
+    }
+    #close, #hide{   position: absolute;
+        z-index: 1;
+        top: .75rem;
+        background: transparent;
+        border: none;}
+    .round{
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        box-shadow: #00000054 1px 0px 1px 0px;
+    }
+    .float{
+        width: fit-content !important;
+    }
+    .divider{border-bottom: 1px solid #ededed;
+    padding-bottom: 1rem;}
+    .contribution-item{
+            height: 300px;
+            width: 200px;
+            flex-shrink: 0;
+            background-image: url(/static/app/images/icons/favicon.png);
+            background-color: #00bcd429;
+            background-blend-mode: multiply;
+    }
+
+
+    
+</style>
+<section class="hero has-background-white is-fullheight-with-navbar">
+    <nav class="primary-bg mb-0">
+    <div class="container">
+
+            <div class="item-tabs is-medium is-align-items-center">  
+                <div class="is-flex is-align-items-center pl-3">                           
+                    <a href="{% url 'groups' %}" class="has-text-white">
+                        <span class="icon"><i class="fa fa-arrow-left" data-url = "{% url 'groups' %}"></i> 
+                        </span>
+                    </a>
+                    <div class="media-left mr-2">
+                        <figure class="image is-48x48">                                
+                            <img src="/static/app/images/icons/favicon.png" alt=" {{item.title}}"> 
+                        </figure> 
+                    </div>
+                </div>
+                <div class="item-details px-2 py-2">
+                    <strong  class="has-text-white" id="title">{{item.name}}</strong> 
+
+                    <div class="is-flex has-text-white-ter">
+                        <div class="pr-1">
+                            <small>
+                                {{item.memberscount}}
+                                <span class="icon"><i class="fa fa-users"></i></span>
+                            </small>                                
+                        </div> 
+                        <div>
+                            <small  class="pr-1">
+                                {{item.contributioncount}} 
+                                <span class="icon"> <i class="fa fa-hand-holding-heart"></i></span>
+                            </small>                                     
+                        </div>                      
+                    </div>
+                </div>   
+                <span class="icon px-3"  id="showHideInfo">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </span>
+            </div>
+    </div>
+    </nav>
+    <div class="menu-drawer p-4 is-hidden" id="menu-drawer">
+        <a href="#details" onclick="showHideElem(document.querySelector('#menu-drawer'));">
+            Group info
+            <span class="icon">
+                <i class="fa fa-circle-info has-text-black-ter"></i>
+            </span>
+        </a>
+    </div>
+    <div class="m-0 p-1">          
+        <div class="container p-1">
+            <h2 class="has-text-weight-bold mt-3 mb-3 is-size-4">Contributions</h2>
+            <div class=" is-flex is-align-items-center is-flex-direction-row is-justify-content-flex-start is-flex-wrap-whitespace" style="overflow: scroll;">
+                {% if items%}
+                    {%for item in items%}
+                    <a href="{% url 'contribution' item.pkid %}"  class="this-card p-4 m-2 is-flex  is-flex-direction-column contribution-item" > 
+                            <div class="media mb-1 is-flex is-align-items-center ">
+                                <div class="media-content">
+                                    <p class="item-title active">
+                                        {{item.title|truncatechars:75}}
+                                    </p>                                    
+                                </div>
+                            </div>
+                            <div class="is-flex is-justify-content-space-evenly is-flex-direction-column is-flex-1" style="flex: 1; ">
+                                <div class=" pt-1 pb-0 has-text-centered ">
+                                    <p>
+                                        <span class="icon">
+                                            <span class="pr-1 has-text-grey">Raised</span>
+                                            <i class="fa fa-hand-holding-heart primary-color"></i>
+                                        </span>
+                                        <br>
+                                        <span>
+                                            {{item.collected}}
+                                            <sup class="has-text-success is-size-7">
+                                                {{item.percentage}}% 
+                                                <i class="fa fa-circle-check has-text-link"></i>
+                                            </sup>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class=" pt-1 pb-0 has-text-centered ">
+                                    <p><span class="icon">
+                                    <span class="pr-1  has-text-grey">Target </span> <i class="fa fa-bank primary-color"></i>
+                                    </span>
+                                        <br>
+                                        <span> {{item.budget}}</span>
+                                    </p> 
+                                </div>
+                                <div class=" pt-1 pb-0 has-text-centered ">
+                                    <p>
+                                        <span class="icon">
+                                            <i class="fa fa-users primary-color"></i>
+                                        </span>
+                                        <br>
+                                        <span> {{item.contributors}}</span>
+                                    </p> 
+                                </div>
+                                
+                            </div>
+                    </a> 
+                    {%endfor%}
+                
+                    {%else%}
+
+                    <div class="container pl-4 pr-4 pb-4">
+                        <h2>No contributions availabe!</h2>
+                        <div class="is-fullwidth mb-4 mt-3  is-medium">
+                            <a href="{% url 'add' %}?item=contribution" class="creators">
+                                <span class="icon mr-2 round">
+                                    <i class="fa fa-hand-holding-heart"></i>
+                                </span>
+                                <span>Create</span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif%}
+                              
+            </div>
+            <h2 class="has-text-weight-bold mt-3 mb-3 is-size-4">Members</h2>
+            <div class=" is-flex is-align-items-center is-flex-direction-row is-justify-content-flex-start is-flex-wrap-whitespace  pl-4 pr-4 pb-4 pt-0" style="overflow: scroll;">
+                <ul>
+                    {% if members%}
+
+                        {%for member in members%}
+                            <li>{{forloop.counter}}. {{member.user}} {% if member.admin%}(Admin){%endif%}</li>
+                        {%endfor%}
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Show the coppy and share button -->        
+    <button id="floatButton" class="button float primary-bg">
+        <span>Invite</span>    
+        <i class="pl-3 fa fa-share-alt float-button has-text-white"></i>
+    </button>
+</section>
+<section class="section is-fullheight" id="details">
+    <div class="container"> 
+        <div class="subtitle pb-4">Group Details</div>       
+        <h1  class="title" >{{item.name}}</h1>
+
+        <figure class="image" style="max-width: 200px">                                
+            <img src="{%if item.img %} {{item.img}} 
+            {%else%}
+            /static/app/images/icons/favicon.png
+            {%endif%}" alt=" {{item.title}}"> 
+        </figure> 
+        <p class="subtitle pt-4">{%if item.description%}{{item.description}}{%endif%}</p>
+        <p class="pb-4">
+            <span >
+                Contributions: <strong> {{item.contributioncount}}</strong>
+            </span>
+            <br>
+            <span>
+                Members:  <strong> {{item.memberscount}} </strong>
+            </span>
+        </p>
+    </div>
+</section>
+{%if not is_member %}
+    <form  method="POST" action="{% url 'join_group' item.pkid %}">{%csrf_token%}
+        <button type="submit" class="button float primary-bg" style="position: fixed;bottom: 40px;left: 1rem;">Join Group</button>
+    </form>
+{%endif%}
+<!-- Floated Items Starts Here -->
+<div class="floatedDiv has-background-white" id="floatedDiv">
+    <button class="button has-background-transparent" id="close">
+        <span class="icon has-text-black"><i class="fa fa-2x fa-close"></i></span>
+    </button>
+    <div class="container p-4">
+        <div class="is-fullwidth is-medium pl-4 divider">
+            <a href="#copy-link" class="is-flex is-align-items-center creators primary-color" id="copyLink">
+                <button class=" button icon mr-2 round primary-bg is-64x64" >
+                    <i class="fa fa-paste fa-2x"></i>
+                </button>
+                <span class="has-text-weight-bold is-size-5">Copy & Share</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block footer %}{% endblock footer %}
+
+{% block script %}
+<script>
+    var floatButton = document.querySelector("#floatButton");
+    var closeButton = document.querySelector("#close");
+    var floatedDiv = document.querySelector("#floatedDiv");
+    
+    [floatButton, closeButton].forEach(element => {element.addEventListener('click', () => floatedDiv.classList.toggle('pullup')); });
+
+</script> 
+
+<script>
+    var url = window.location.href
+    var copyLink = document.querySelector("#copyLink")
+    const copyText = async (data)=>{            
+            await navigator.clipboard.writeText(data);
+            alert("Copied");
+        }
+    
+    copyLink.addEventListener('click',(event)=>{event.preventDefault();copyText(url)})
+</script>
+    
+{% endblock script %}
+    
+
+    
