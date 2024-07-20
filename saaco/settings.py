@@ -19,7 +19,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [ 
     'saaco.onrender.com',
-    'www.saacoapp.com'
+    'www.saacoapp.com',
     'saacoapp.com',
     '127.0.0.1',
     'localhost'
