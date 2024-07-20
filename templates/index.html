@@ -36,8 +36,19 @@
             </p>  
             {% load socialaccount %}
             <form class="is-flex  is-justify-content-center mb-5  mt-6" method="post" action="{% provider_login_url 'google' %}?next=/"> {%csrf_token%}
-                <button type="submit" class="button primary-bg is-half is-medium">
+                <!-- <button type="submit" class="button primary-bg is-half is-medium">
                     <span class="icon" >
+                        <i class="fa fa-brands fa-google has-text-white"></i> 
+                    </span> 
+                    <span class="pl-4">Get in using Google</span>                       
+                </button> --><button style="
+    /* font-size: 1.25rem; */
+    box-shadow: 4px 4px 20px 11px #2196f35c, -4px -4px 18px 12px #e91e635c;
+    background: linear-gradient(45deg, #E91E63, #2196F3);
+    border-color: transparent;
+    border-radius: 10px;
+" type="submit" class="button primary-bg is-half is-large">
+                    <span class="icon">
                         <i class="fa fa-brands fa-google has-text-white"></i> 
                     </span> 
                     <span class="pl-4">Get in using Google</span>                       
