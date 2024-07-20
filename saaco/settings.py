@@ -15,10 +15,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [ 
     'saaco.onrender.com',
+    'www.saacoapp.com'
     'saacoapp.com',
     '127.0.0.1',
     'localhost'
