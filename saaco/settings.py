@@ -19,9 +19,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [ 
     'saaco.onrender.com',
+    'saacoapp.com',
     '127.0.0.1',
-    'localhost',
-    'saacoapp.com'
+    'localhost'
 ]
 
 
@@ -126,14 +126,10 @@ WSGI_APPLICATION = 'saaco.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if not DEBUG:# Replace the SQLite DATABASES configuration with PostgreSQL:
-    DATABASES = {
-        'default': dj_database_url.config(        # Replace this value with your local database's connection string.        
-                default=env(DATABASE_URL_EXTERNAL),
-                conn_max_age=600
-            )
-        }
+DATABASES = {
+    'default': dj_database_url.config(default=env('DATABASE_URL_INTERNAL'),conn_max_age=600)
+}
+
 
 # if DEBUG:
 # DATABASES = {
@@ -174,18 +170,7 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = "/home/"
 LOGOUT_REDIRECT_URL = "/user/login/" 
 
-# STATIC_ROOT = BASE_DIR / 'static/'
-# files storage during development
-# STATIC_URL = '/static/'
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_DIRS = [  os.path.join(BASE_DIR, "static"),
-# ]
-
-
-# if  DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC FILE SETUP
 STATICFILES_DIRS = [BASE_DIR / 'static/']
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
