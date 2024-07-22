@@ -117,8 +117,15 @@ class Contribution(models.Model):
         except: list = 0
         return list
     def percentage(self):
-        
-        return round((self.collected/self.budget)*100, 2)
+        # print (self.collected)
+        # print(self.budget)
+        percent = 0.00
+        try:
+            percent = round((self.collected/self.budget)*100, 2)
+        except:
+            percent = 0.00
+            
+        return percent
 
     def save(self,*args, **kwargs):
         if not self.pkid:

@@ -128,7 +128,7 @@ WSGI_APPLICATION = 'saaco.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL_INTERNAL'),conn_max_age=600)
+    'default': dj_database_url.config(default=env('DATABASE_URL_EXTERNAL'),conn_max_age=600)
 }
 
 
