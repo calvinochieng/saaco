@@ -17,6 +17,9 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = False
 
+LOCAL = False
+
+
 ALLOWED_HOSTS = [ 
     'saaco.onrender.com',
     'www.saacoapp.com',
@@ -127,18 +130,18 @@ WSGI_APPLICATION = 'saaco.wsgi.application'
 
 
 # Database
-DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL_EXTERNAL'),conn_max_age=600)
-}
 
-
-# if DEBUG:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+if LOCAL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+    'default': dj_database_url.config(default=env('DATABASE_URL_SUPERBASE'),conn_max_age=600)
+    }
 
 
 # Password validation

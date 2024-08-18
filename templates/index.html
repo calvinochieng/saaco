@@ -1,10 +1,13 @@
-{% extends 'base.html'%}
+{% extends 'index-base.html'%}
 
 {% block content %}
 <style>
     .hero-body >.icon{
         position: absolute;
-        opacity: .6;
+        opacity: .18;
+    }
+    .title{
+        color: #3f3f3f !important;
     }
     .title>strong{
         font-weight: inherit;
@@ -27,44 +30,37 @@
         <i class="icon fa-brands fa-3x mb-5 primary-color fa-twitter" style="bottom: 11%;left: 9%;"></i> 
         <i class="icon fa-brands fa-3x mb-5 primary-color fa-facebook" style="top: 16%;left: 13%;"></i>
         <div class="container largescreen">
-            <h1 class="title has-text-white has-text-centered" >
+            <h1 class="title has-text-black-ter has-text-centered" >
                 WhatsApp <strong class="primary-color">Contribution</strong> and <strong
                 class="primary-color">Fundraising </strong>Simply Made Easy
             </h1>  
-            <p class="title-sub has-text-white has-text-centered" style = "font-size: 1.5rem;">
+            <p class="title-sub has-text-black-ter has-text-centered" style = "font-size: 1.5rem;">
                 Organize and track your WhatsApp group contributions in one place. Say goodbye to manual updates!
             </p>  
             {% load socialaccount %}
-            <form class="is-flex  is-justify-content-center mb-5  mt-6" method="post" action="{% provider_login_url 'google' %}?next=/"> {%csrf_token%}
-                <!-- <button type="submit" class="button primary-bg is-half is-medium">
-                    <span class="icon" >
-                        <i class="fa fa-brands fa-google has-text-white"></i> 
-                    </span> 
-                    <span class="pl-4">Get in using Google</span>                       
-                </button> --><button style="
-    /* font-size: 1.25rem; */
-    box-shadow: 4px 4px 20px 11px #2196f35c, -4px -4px 18px 12px #e91e635c;
-    background: linear-gradient(45deg, #E91E63, #2196F3);
-    border-color: transparent;
-    border-radius: 10px;
-" type="submit" class="button primary-bg is-half is-large">
+            <form class="is-flex  is-justify-content-center mb-5  mt-5" method="post" action="{% provider_login_url 'google' %}?next=/"> {%csrf_token%}
+                <button style="
+                    box-shadow: 4px 4px 20px 11px #2196f31a, -4px -4px 18px 12px #e91e631a;
+                    background: linear-gradient(45deg, #E91E63, #2196F3);
+                    border-color: transparent; border-radius: 10px;"
+                     type="submit" class="button primary-medium is-half is-medium">
                     <span class="icon">
                         <i class="fa fa-brands fa-google has-text-white"></i> 
                     </span> 
-                    <span class="pl-4">Get in using Google</span>                       
+                    <span class="pl-4 has-text-white">Get in using Google</span>                       
                 </button>
             </form> 
-            <div class="mt-5 mb-5 is-flex  is-justify-content-center is-align-items-center">
-                <span  class="p-3 has-text-white">Or Manually</span>
+            <div class="is-flex  is-justify-content-center is-align-items-center">
+                <span  class="p-3">Or Manually</span>
             </div>        
             <div class="field is-grouped mt-5 is-justify-content-center">
                 <p class="control">
-                  <a class="button primary-outline has-text-white is-medium has-text-weight-bold" href="{% url 'login' %}">                    
+                  <a class="button primary-outline   has-text-weight-bold" href="{% url 'login' %}">                    
                     Sign In
                   </a>
                 </p>
                 <p class="control">
-                    <a class="button primary-outline has-text-white is-medium has-text-weight-bold" href="{% url 'register' %}">Sign Up</a>
+                    <a class="button primary-outline  has-text-weight-bold" href="{% url 'register' %}">Sign Up</a>
                 </p>
               </div>
         </div>

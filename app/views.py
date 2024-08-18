@@ -13,7 +13,7 @@ from app.forms import RegistrationForm, GroupForm, ContributionForm, Contributor
 
 def index(request):     
     if request.user.is_authenticated: return redirect('home')   
-    messages.success(request, 'Welcome, thank you so much for coming by please login / register below')             
+    # messages.success(request, 'Welcome, thank you so much for coming by please login / register below')             
     return render(request,'index.html') 
 
 def register(request):
@@ -80,7 +80,7 @@ def groups(request):
     
     return render(request, 'groups.html', context)
 
-@login_required( login_url='/user/login/') 
+# @login_required( login_url='/user/login/') 
 def group(request, pkid=None):
     item = get_object_or_404(Group, pkid= pkid)
     user =  request.user
@@ -100,7 +100,8 @@ def join_group(request ,pkid = None):
     user =  request.user
     try:
         membership =  Membership.objects.create( group = item, user = user )
-    except Exception as e:
+        messages.success(request, f"You've join {item.name}, welcome")
+    except:
         messages.warning(request,f"You can't join '{item.name}'. Error: occured")
          
     
@@ -151,7 +152,7 @@ def contributions(request):
 
     return render(request, 'contributions.html', context)
 
-@login_required( login_url='/user/login/') 
+# @login_required( login_url='/user/login/') 
 def contribution(request, pkid=None):
     user = request.user
     is_admin = False

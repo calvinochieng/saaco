@@ -3,6 +3,25 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.urls import reverse
 from app.services import idshortener
+
+class Profile(models.Model):
+    name = models.OneToOneField(User, on_delete=models.CASCADE)
+    dp = models.ImageField( upload_to="profile_images", blank = True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    birthday = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=13, blank=True)
+    time = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = ("Profile")
+        verbose_name_plural = ("Profiles")
+
+    def __str__(self):
+        return self.name.username
+
+    def get_absolute_url(self):
+        return reverse("UserProfile_detail", kwargs={"pk": self.pk})
+
 class Group(models.Model):
     """Model definition for Group."""
     name = models.CharField(max_length=100)
@@ -113,15 +132,16 @@ class Contribution(models.Model):
     
     
     def contributors(self):
-        try: list = len(self.jsondata['contributors'])
-        except: list = 0
-        return list
-    def percentage(self):
-        # print (self.collected)
-        # print(self.budget)
+        try: list_ = len(self.jsondata['contributors'])
+        except: list_ = 0
+        return list_
+
+    def percentage(self): 
         percent = 0.00
         try:
-            percent = round((self.collected/self.budget)*100, 2)
+            if budget == 0.00 : percent = 0.00
+            else:
+                percent = round((self.collected/self.budget)*100, 2)
         except:
             percent = 0.00
             
@@ -132,7 +152,7 @@ class Contribution(models.Model):
             try:
                 self.pkid = idshortener()
             except: 
-               raise ValueError('Could not generate KPID') 
+               raise ValueError('Could not generate PKID') 
         # print(self.pkid)
         
         super().save(*args, **kwargs)

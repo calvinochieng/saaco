@@ -69,39 +69,39 @@
     .float-add{
         height: 48px !important;
         width: 48px !important;
-/*        box-shadow: 0px 0em 1em 0.25em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;*/
-        box-shadow: -5px 7px 20px 2px #2196F3;
+    /*        box-shadow: 0px 0em 1em 0.25em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;*/
+            box-shadow: -5px 7px 20px 2px #2196F3;
+        }
+        .card-content.content{
+
+            box-shadow: 0px 0px 3px 0px #44444430;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            margin: 0rem 1rem 1rem 1rem;
+        }
+    .this-card{
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin: 1rem;
+        border: 1px solid #03a9f41a;
+        box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
+        background-image: url(/static/app/images/icons/favicon.png);
+        background-color: #00bcd429;
+        background-blend-mode: multiply;
+        background-repeat: no-repeat;
+        background-position: top;
+        background-position-y: -13%;
+
     }
-    .card-content.content{
+    #contributorsList>p:hover{
+        padding-top: .5rem;
+        background: #2196f31f;
+        transition: all 200ms;
 
-        box-shadow: 0px 0px 3px 0px #44444430;
-        border-radius: 5px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        margin: 0rem 1rem 1rem 1rem;
     }
-.this-card{
-    border-radius: 15px;
-    padding: 1.5rem;
-    margin: 1rem;
-    border: 1px solid #03a9f41a;
-    box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
-    background-image: url(/static/app/images/icons/favicon.png);
-    background-color: #00bcd429;
-    background-blend-mode: multiply;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-position-y: -13%;
 
-}
-#contributorsList>p:hover{
-    padding-top: .5rem;
-    background: #2196f31f;
-    transition: all 200ms;
-
-}
-
-#contributorsList{
+    #contributorsList{
     transition: all 200ms;
 }
 </style>
@@ -169,7 +169,7 @@
                         <strong class="is-size-4 primary-color" id="raised">{{item.collected}}</strong>
                         <sup class="has-text-success is-size-7"><span id="percentage">{{item.percentage}}% </span> <i class="fa fa-circle-check has-text-link"></i></sup>
                     </span>                        
-                    <button  id="{% if is_admin %}addButton{%else%}notAdmin{% endif %}" class="button blink-now round  is-link float-add">
+                    <button  id="addButton" class="button round  is-link float-add">
                         <i class="fa fa-add float-button has-text-white"></i>
                     </button> 
                 </div>
@@ -288,35 +288,45 @@
         </div>
     </div>
 </div>
-
-{% if is_admin %}    
+   
     <!-- Wizard for adding new contributors -->
-    <div id="contributorsFormContainer" class="floated has-background-white">   
+    <div id="contributorsFormContainer" class="floated has-background-white is-flex is-flex-direction-column">   
         <button class="button has-background-transparent" id="hide">
             <span class="icon has-text-black"><i class="fa fa-2x fa-close"></i></span>
-        </button>   
-        <form action="{% url 'api_contributors' pkid %}" method="POST" class="form p-3" id="contributorForm">          
-            {% csrf_token %}
-            <div class="field">
+        </button>  
+        {% if is_admin %}  
+            <form action="{% url 'api_contributors' pkid %}" method="POST" class="form p-3" id="contributorForm">          
+                {% csrf_token %}
+                <div class="field">
 
-                <label for="name" class="label ">Add a Contributor</label>
-                <div class="control">
-                    <label for="id_name">Name:</label> 
-                    <input type="text" name="name" class="is-medium input mb-4" placeholder="Contributor's Name" required="" id="id_name">                  
-                    <label for="id_amount">Amount:</label>
-                    <input type="number" name="amount" class="is-medium input" placeholder="Amount" required="" id="id_amount" value="">
-                    <input type="hidden" name="pk" id="id_pk">                
-                </div>
-            </div>                            
-            <button id="contributionsSubmitor"  type="submit" class="button primary-bg is-medium ">
-                <span>Submit</span>
-                <span class="icon is-small">
-                    <i class="fas fa-chevron-right"></i>
-                </span>
-            </button>
-        </form>
-    </div>    
-{% endif %}
+                    <label for="name" class="label ">Add a Contributor</label>
+                    <div class="control">
+                        <label for="id_name">Name:</label> 
+                        <input type="text" name="name" class="is-medium input mb-4" placeholder="Contributor's Name" required="" id="id_name">                  
+                        <label for="id_amount">Amount:</label>
+                        <input type="number" name="amount" class="is-medium input" placeholder="Amount" required="" id="id_amount" value="">
+                        <input type="hidden" name="pk" id="id_pk">                
+                    </div>
+                </div>                            
+                <button id="contributionsSubmitor"  type="submit" class="button primary-bg is-medium ">
+                    <span>Submit</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                </button>
+            </form>  
+        {% endif %}
+        <div class="form p-3 mt-4" style="border-top: 1px solid #ababab6b;">
+            <strong>Send Contribution Via M-Pesa / Airtel </strong>
+            <br>
+            <span>Account No: <strong>{{item.contact}}</strong> </span> 
+        </div>
+        <div class=" is-flex is-align-items-center is-justify-content-center mt-4">
+            <img  style="height: 28px;" src="/static/app/images/mpesa.png">
+            <img  style=" height: 28px;" src="/static/app/images/airtel.png">
+            <img  style=" height: 28px; background-color: #00BCD4; margin-left: 10px;" src="/static/app/images/telkom.png">
+        </div>
+    </div>  
 
 {% endblock content %}
 
@@ -495,9 +505,9 @@
             }
         };
               
-        
+    
+        [addButton, hideFormButton].forEach(element => {element.addEventListener('click', () => contributorsFormContainer.classList.toggle('pullup')); });
         if (contributorForm ){
-            [addButton, hideFormButton].forEach(element => {element.addEventListener('click', () => contributorsFormContainer.classList.toggle('pullup')); });
             contributorForm.addEventListener('submit',e=>{
                 e.preventDefault();
                 addContributor();

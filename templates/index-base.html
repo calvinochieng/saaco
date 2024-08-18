@@ -5,25 +5,9 @@
   <meta charset="UTF-8">
   {% load static %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Saaco App{% endblock title %}</title>
+  <title>Saaco App</title>
   <link rel="manifest" href="/static/pwa/manifest.json" />
-  
-  {% if request.user.is_authenticated%}
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js").then(
-          (registration) => {
-            console.log("SW registration success", registration);
-          },
-          (er) => {
-            console.error(`SW failed: ${er}`);
-          },
-        );
-      } else {
-        console.error("SW unsupported");
-      }
-    </script>
-  {%endif%}
+
 
   <meta name="description" content=" {% block description %}{% endblock description %}">       
   <!-- twitter -->
@@ -49,66 +33,14 @@
     gtag('config', 'G-9Q4TESDCD5');
   </script> {% endcomment %}
   <style>
+  	.navbar-burger{
+  		color: #4a4a4a !important;
+  	}
   .lander-background{
 /*        background :linear-gradient(344deg, #232625, #001794);*/
 background: white;
   }
 
-  figure.image{
-    overflow: hidden;
-  }
-  .image.is-2by1 img{
-      height: auto !important;
-      border-radius: 0.25rem;
-  }
-  .icon.is-online{
-    position:absolute;
-    right:.5rem;
-    top: 1rem
-  }
-  .icon.is-online .fa-circle{
-    font-size: 15px;
-    color: #48c774;
-  }
-
-  .item-title{
-    font-size: 1.25rem !important;
-    color: #363636;
-}
-
-.items{
-        margin-bottom: .35rem;
-        min-height: 100px;
-        border-radius: 1.0rem;
-        color: #4a4a4a;
-        max-width: 100%;
-        overflow: hidden;
-        position: relative;
-        border: 1px solid #03a9f41a;
-        box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
-    }
-.item-tabs{
-  -webkit-overflow-scrolling: touch;
-  align-items: stretch;
-  display: flex;
-  font-size: 1.2rem;
-  justify-content: space-between;
-  overflow: hidden;
-  overflow-x: auto;
-}
-.item-details{
-  display: flex;
-  vertical-align: top;
-  overflow-x: scroll;
-  white-space: nowrap;
-  flex-direction: column;
-  flex: 1;
-  scrollbar-width: none;
-}
-
-small {
-  font-size: .67rem;
-}
 span.name{ position: relative;}
 span.name::after{
   content: '';
@@ -123,63 +55,20 @@ span.name::after{
 span.o{
   text-shadow: #232625 -1px 0px 4px;
 }
-.float{
-        position:fixed;
-        width:60px;
-        height:60px;
-        bottom:40px;
-        right:1.25rem;
-        border-radius:50px;
-        text-align:center;
-        box-shadow: 2px 2px 3px #898;
-        z-index: 10000;
-    }
-    .this-card{
-      border-radius: 15px;
-      padding: 1.5rem;
-      margin: 1rem;
-      border: 1px solid #03a9f41a;
-      box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
-  
-  }
-  .card-content {
-    padding: 1.05rem;
-  }
   .has-text-error{color: #f14668 !important}
-  .menu-drawer{
-    position: absolute;
-    top: 70px;
-    z-index: 10000;    
-    min-width: 100px;
-    background: #fcfcfc;
-    right: 0;
-/*     transform: translateX(100%); */
-    transition: all 200ms;
-    border-radius: 8px;
-    box-shadow: 0px 0em 1em -0.125em rgb(3 169 244 / 23%), 0 0 0 1px rgba(10,10,10,.02) !important;
-/*    visibility: hidden;*/
-  }
-  .menu-drawer::after{
-        content: "";
-    background: white;
-    position: absolute;
-    top: -4px;
-    right: 8px;
-    transform: rotate(45deg);
-    height: 1.0rem;
-    width: 1.0rem;
-  }
-  #details{
-    height: 100vh;
-  }
+
+.title-sub{
+	color: #4a4a4a !important;
+}
+
   </style>
 </head>
 <body>
-  <nav class="navbar  primary-bg ">
+  <nav class="navbar has-background-white-ter ">
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="/">
-          <span class="name" style="color: #1a1a1a !important;"><span class="has-text-white">Saac<span  class="o">o</span></span>.</span>
+          <span class="name" style="color: #3f3f3f !important;"><span class="primary-color">Saac<span  class="o">o</span></span>.</span>
         </a>
         <div class="navbar-burger" data-target="navMenu">
           <span></span>
@@ -328,50 +217,7 @@ span.o{
         showHideInfo.addEventListener("click", ()=> showHideElem(document.querySelector("#menu-drawer")));
     }
   </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Functions to open and close a modal
-        function openModal($el) {
-            $el.classList.add('is-active');
-        }
-        
-        function closeModal($el) {
-            $el.classList.remove('is-active');
-        }
-        
-        function closeAllModals() {
-            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-            closeModal($modal);
-            });
-        }
-        
-        // Add a click event on buttons to open a specific modal
-        (document.querySelectorAll('.modal-trigger') || []).forEach(($trigger) => {
-            const modal = $trigger.dataset.target;
-            const $target = document.getElementById(modal);
-        
-            $trigger.addEventListener('click', () => {
-            openModal($target);
-            });
-        });
-        
-        // Add a click event on various child elements to close the parent modal
-        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-            const $target = $close.closest('.modal');
-        
-            $close.addEventListener('click', () => {
-            closeModal($target);
-            });
-        });
-        
-        // Add a keyboard event to close all modals
-        document.addEventListener('keydown', (event) => {
-            if(event.key === "Escape") {
-            closeAllModals();
-            }
-        });
-    });
-  </script>
+
   {% block script %}{% endblock script %}
     
 </body>

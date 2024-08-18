@@ -48,7 +48,7 @@ class ContributionForm(forms.ModelForm):
         (OTHER, 'Other'),
     ]
     item = forms.CharField(required= True,widget=forms.HiddenInput(attrs = {'value': 'contribution'}))
-    title =  forms.CharField(required = True, widget=forms.TextInput(attrs={ 'class': 'is-medium input', 'placeholder':'Title Of Your Contribution'}))
+    title =  forms.CharField(required = True, widget=forms.TextInput(attrs={ 'class': 'is-normal input', 'placeholder':'Title Of Your Contribution'}))
     description = forms.CharField(required=True, widget =forms.Textarea(attrs={
         'class': 'textarea ',
         'rows' : '2',
